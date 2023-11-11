@@ -6,22 +6,24 @@
   import Logo from "../components/Logo.svelte";
 
   let roomId = "my-svelte-room";
-  let room: ReturnType<enterRoom["room"]>;
-  let points;
+  let room = $state();
+  let leave = $state();
+  let points = $state();
 
   onMount(() => {
     async function run() {
       const info = enterRoom(roomId);
       const storage = await info.room.getStorage();
       room = info.room;
+      leave = info.leave;
       points = storage.root.get("points");
-
-      onDestroy(() => {
-        info.leave();
-      });
     }
 
     run();
+  });
+
+  onDestroy(() => {
+    leave();
   });
 </script>
 

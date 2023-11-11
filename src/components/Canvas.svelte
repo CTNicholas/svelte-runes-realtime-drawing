@@ -6,9 +6,7 @@
   export let room: TypedRoom;
   export let points: Storage["points"];
 
-  console.log(points);
-
-  let pathData;
+  let pathData = $state();
 
   function handlePointerDown(e: PointerEvent) {
     e.target.setPointerCapture(e.pointerId);
@@ -34,9 +32,6 @@
     });
     pathData = getSvgPathFromStroke(stroke);
   });
-
-  $: {
-  }
 </script>
 
 <svg on:pointerdown={handlePointerDown} on:pointermove={handlePointerMove}>
