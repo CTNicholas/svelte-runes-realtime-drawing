@@ -1,8 +1,8 @@
 import { createClient, type Room, LiveList } from "@liveblocks/client";
+import { PUBLIC_LIVEBLOCKS_PUBLIC_KEY } from "$env/static/public";
 
 export const client = createClient({
-  publicApiKey:
-    "pk_dev_vp2eZ8Sj40zJlXbJb4jUqcgrnfczQZaKV75dIv21vbMeSuKWp2aXUuwQogow6JLN",
+  publicApiKey: PUBLIC_LIVEBLOCKS_PUBLIC_KEY,
   throttle: 16,
 });
 
@@ -18,6 +18,9 @@ export type Presence = {
 // Room, even after all users leave. Fields under Storage typically are
 // LiveList, LiveMap, LiveObject instances, for which updates are
 // automatically persisted and synced to all connected clients.
+
+// A LiveList (multiplayer array) of coordinates used to represent the path
+// https://liveblocks.io/docs/api-reference/liveblocks-client#LiveList
 export type Point =
   | [x: number, y: number, pressure: number]
   | [x: number, y: number];
@@ -51,10 +54,14 @@ export type ThreadMetadata = {
 
 export type TypedRoom = Room<Presence, Storage, UserMeta, RoomEvent>;
 
-// Enter room with initial values
+// Enter room with initial values and correct types
 export function enterRoom(roomId: string) {
   return client.enterRoom<Presence, Storage, UserMeta, RoomEvent>(roomId, {
     initialPresence: {},
-    initialStorage: { points: new LiveList() },
+    initialStorage: {
+      // Start the room with an empty LiveList
+      // https://liveblocks.io/docs/api-reference/liveblocks-client#LiveList
+      points: new LiveList(),
+    },
   });
 }
