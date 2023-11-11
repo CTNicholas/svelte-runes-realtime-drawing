@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import "../globals.css";
   import Canvas from "../components/Canvas.svelte";
   import { onDestroy, onMount } from "svelte";

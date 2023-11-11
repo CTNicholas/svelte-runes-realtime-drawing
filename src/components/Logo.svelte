@@ -1,4 +1,4 @@
-<a href="https://liveblocks.io">
+<a href="https://liveblocks.io" target="_blank">
   <svg
     width="384"
     height="72"

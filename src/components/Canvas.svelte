@@ -3,8 +3,11 @@
   import { getSvgPathFromStroke } from "./utils";
   import type { TypedRoom, Storage } from "../liveblocks.config";
 
-  export let room: TypedRoom;
-  export let points: Storage["points"];
+  type Props = {
+    room: TypedRoom;
+    points: Storage["points"];
+  };
+  let { room, points }: Props = $props();
 
   let pathData = $state();
 
@@ -41,6 +44,7 @@
       <stop offset="100%" stop-color="#E54900" />
     </linearGradient>
   </defs>
+
   {#if points}
     <path d={pathData} fill="white" />
   {/if}
