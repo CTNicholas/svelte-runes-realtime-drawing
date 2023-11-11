@@ -1,36 +1,52 @@
-<script>
+<script lang="ts">
   import "../globals.css";
   import Canvas from "../components/Canvas.svelte";
   import { onDestroy, onMount } from "svelte";
-  import { enterRoom } from "../liveblocks.config";
   import Logo from "../components/Logo.svelte";
+  import { enterRoom } from "../liveblocks.config";
 
-  let roomId = "my-svelte-room";
-  let room = $state();
-  let leave = $state();
-  let points = $state();
+  // Functions to join/leave a multiplayer room and get real-time Storage
+  export function useLiveblocks(roomId: string) {
+    let room = $state();
+    let leave = $state();
+    let storage = $state();
 
-  onMount(() => {
-    async function run() {
+    async function enter() {
       const info = enterRoom(roomId);
-      const storage = await info.room.getStorage();
       room = info.room;
       leave = info.leave;
-      points = storage.root.get("points");
+      storage = (await info.room.getStorage()).root;
     }
 
-    run();
+    return {
+      enter,
+      get leave() {
+        return leave;
+      },
+      get room() {
+        return room;
+      },
+      get storage() {
+        return storage;
+      },
+    };
+  }
+
+  const lb = useLiveblocks("my-svelte-room");
+
+  onMount(() => {
+    lb.enter();
   });
 
   onDestroy(() => {
-    leave();
+    lb.leave();
   });
 </script>
 
 <main>
   <Logo />
-  {#if room && points}
-    <Canvas {room} {points} />
+  {#if lb.room && lb.storage}
+    <Canvas room={lb.room} storage={lb.storage} />
   {/if}
 </main>
 

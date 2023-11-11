@@ -3,12 +3,15 @@
   import { getSvgPathFromStroke } from "./utils";
   import type { TypedRoom, Storage } from "../liveblocks.config";
 
-  type Props = {
+  let {
+    room,
+    storage,
+  }: {
     room: TypedRoom;
-    points: Storage["points"];
-  };
-  let { room, points }: Props = $props();
+    storage: Storage;
+  } = $props();
 
+  let points = $state(storage.get("points"));
   let pathData = $state();
 
   function handlePointerDown(e: PointerEvent) {
