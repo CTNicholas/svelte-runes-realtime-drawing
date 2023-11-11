@@ -1,3 +1,6 @@
+https://github.com/CTNicholas/svelte-runes-realtime-drawing/assets/33033422/e6da7705-c4f7-4e93-8498-5c20c225429d
+
+
 ## Svelte runes + Liveblocks demo
 
 This demo shows you how to build a real-time drawing with Svelte 5 runes and [Liveblocks](https://liveblocks.io/).
