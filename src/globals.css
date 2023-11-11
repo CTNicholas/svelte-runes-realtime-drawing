@@ -1,0 +1,8 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
