@@ -11,14 +11,14 @@ export class Liveblocks {
   }
 
   // Enter a multiplayer room, get storage, return a cleanup function
-  enter() {
+  enter = () => {
     const { room, leave } = enterRoom(this.roomId);
     room.getStorage().then(({ root }) => {
       this.storage = root;
     });
     this.room = room;
     return leave;
-  }
+  };
 }
 
 // Was previously written like this and used with `useLiveblocks()` and onMount/onDestroy
