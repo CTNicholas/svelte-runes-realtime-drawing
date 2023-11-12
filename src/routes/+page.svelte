@@ -1,18 +1,13 @@
 <script lang="ts">
   import "../globals.css";
-  import { onDestroy, onMount } from "svelte";
-  import { useLiveblocks } from "../components/useLiveblocks.svelte";
+  import { Liveblocks } from "../components/useLiveblocks.svelte";
   import Canvas from "../components/Canvas.svelte";
   import Logo from "../components/Logo.svelte";
 
-  const lb = useLiveblocks("my-svelte-room");
+  const lb = new Liveblocks("my-svelte-room");
 
-  onMount(() => {
-    lb.enter();
-  });
-
-  onDestroy(() => {
-    lb.leave();
+  $effect(() => {
+    return lb.enter();
   });
 </script>
 

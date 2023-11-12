@@ -47,16 +47,9 @@
   });
 </script>
 
-<svg on:pointerdown={handlePointerDown} on:pointermove={handlePointerMove}>
-  <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#E54B00" />
-      <stop offset="100%" stop-color="#E54900" />
-    </linearGradient>
-  </defs>
-
+<svg onpointerdown={handlePointerDown} onpointermove={handlePointerMove}>
   {#if points}
-    <path d={pathData} fill="white" />
+    <path d={pathData} fill="#E54900" />
   {/if}
 </svg>
 
@@ -65,9 +58,5 @@
     width: 100%;
     height: 100%;
     touch-action: none;
-  }
-
-  path {
-    fill: url("#gradient");
   }
 </style>

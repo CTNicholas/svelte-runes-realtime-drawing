@@ -1,19 +1,40 @@
 import { enterRoom } from "../liveblocks.config";
 
 // Functions to join/leave a multiplayer room and get real-time Storage
-export function useLiveblocks(roomId: string) {
-  class Liveblocks {
-    room = $state();
-    leave = $state();
-    storage = $state();
+export class Liveblocks {
+  room = $state();
+  storage = $state();
+  roomId;
 
-    async enter() {
-      const info = enterRoom(roomId);
-      this.room = info.room;
-      this.leave = info.leave;
-      this.storage = (await info.room.getStorage()).root;
-    }
+  constructor(roomId: string) {
+    this.roomId = roomId;
   }
 
-  return new Liveblocks();
+  // Enter a multiplayer room, get storage, return a cleanup function
+  enter() {
+    const { room, leave } = enterRoom(this.roomId);
+    room.getStorage().then(({ root }) => {
+      this.storage = root;
+    });
+    this.room = room;
+    return leave;
+  }
 }
+
+// Was previously written like this and used with `useLiveblocks()` and onMount/onDestroy
+// export function useLiveblocks(roomId: string) {
+//   class Liveblocks {
+//     room = $state();
+//     leave  = $state();
+//     storage = $state();
+//
+//     async enter() {
+//       const info = enterRoom(roomId);
+//       this.room = info.room;
+//       this.leave = info.leave;
+//       this.storage = (await info.room.getStorage()).root);
+//     }
+//   }
+//
+//   return new Liveblocks();
+// }
