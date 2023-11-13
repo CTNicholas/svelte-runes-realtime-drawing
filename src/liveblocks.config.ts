@@ -1,4 +1,4 @@
-import { createClient, type Room, LiveList } from "@liveblocks/client";
+import { createClient, type Room, LiveList, LiveMap } from "@liveblocks/client";
 import { PUBLIC_LIVEBLOCKS_PUBLIC_KEY } from "$env/static/public";
 
 export const client = createClient({
@@ -25,8 +25,10 @@ export type Point =
   | [x: number, y: number, pressure: number]
   | [x: number, y: number];
 
+export type Path = LiveList<Point>;
+
 export type Storage = {
-  points: LiveList<Point>;
+  paths: LiveMap<string, Path>;
 };
 
 // Optionally, UserMeta represents static/readonly metadata on each user, as
@@ -59,9 +61,9 @@ export function enterRoom(roomId: string) {
   return client.enterRoom<Presence, Storage, UserMeta, RoomEvent>(roomId, {
     initialPresence: {},
     initialStorage: {
-      // Start the room with an empty LiveList
-      // https://liveblocks.io/docs/api-reference/liveblocks-client#LiveList
-      points: new LiveList(),
+      // Start the room with an empty LiveMap
+      // https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap
+      paths: new LiveMap(),
     },
   });
 }

@@ -4,7 +4,7 @@
   import Canvas from "../components/Canvas.svelte";
   import Logo from "../components/Logo.svelte";
 
-  const lb = new Liveblocks("my-svelte-room");
+  const lb = new Liveblocks("my-other-svelte-room");
 
   $effect(() => {
     return lb.enter();

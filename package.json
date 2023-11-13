@@ -30,6 +30,7 @@
 	"type": "module",
 	"dependencies": {
 		"@liveblocks/client": "^1.7.1",
-		"@liveblocks/node": "^1.7.1"
+		"@liveblocks/node": "^1.7.1",
+		"nanoid": "^5.0.3"
 	}
 }
