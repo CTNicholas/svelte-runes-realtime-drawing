@@ -2,7 +2,7 @@
   import { getStroke } from "./perfect-freehand";
   import { getSvgPathFromStroke } from "./utils";
   import type { TypedRoom, Storage } from "../liveblocks.config";
-  import { LiveList } from "@liveblocks/client";
+  import { LiveList, LiveObject } from "@liveblocks/client";
   import { nanoid } from "nanoid";
 
   let {
@@ -27,9 +27,15 @@
   function handlePointerDown(e: PointerEvent) {
     e.target.setPointerCapture(e.pointerId);
 
+    const newPoints = new LiveList();
+    newPoints.push([e.pageX, e.pageY, e.pressure]);
+
     const newId = nanoid();
-    const newPath = new LiveList();
-    newPath.push([e.pageX, e.pageY, e.pressure]);
+    const newPath = new LiveObject({
+      color: "#E54900",
+      points: newPoints,
+    });
+
     paths.set(newId, newPath);
     currentId = newId;
   }
@@ -42,14 +48,15 @@
 
     e.target.setPointerCapture(e.pointerId);
 
-    const path = paths.get(currentId);
-    path.push([e.pageX, e.pageY, e.pressure]);
+    const points = paths.get(currentId).get("points");
+    points.push([e.pageX, e.pageY, e.pressure]);
   }
 
   function handlePointerUp() {
     currentId = null;
   }
 
+  // Delete all paths in one go
   function resetPaths() {
     room.batch(() => {
       for (const id of paths.keys()) {
@@ -62,13 +69,16 @@
     const newSvgPaths = [];
 
     for (const path of paths.values()) {
-      const stroke = getStroke(path.toImmutable(), {
+      const points = path.get("points");
+      const fill = path.get("color");
+
+      const stroke = getStroke(points.toImmutable(), {
         size: 16,
         thinning: 0.5,
         smoothing: 0.5,
         streamline: 0.5,
       });
-      newSvgPaths.push(getSvgPathFromStroke(stroke));
+      newSvgPaths.push({ fill, d: getSvgPathFromStroke(stroke) });
     }
 
     svgPaths = [...newSvgPaths];
@@ -87,7 +97,7 @@
   onpointerup={handlePointerUp}
 >
   {#each svgPaths as svgPath}
-    <path d={svgPath} fill="#E54900" />
+    <path d={svgPath.d} fill={svgPath.fill} />
   {/each}
 </svg>
 

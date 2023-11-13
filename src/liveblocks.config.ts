@@ -1,4 +1,10 @@
-import { createClient, type Room, LiveList, LiveMap } from "@liveblocks/client";
+import {
+  createClient,
+  type Room,
+  LiveList,
+  LiveMap,
+  LiveObject,
+} from "@liveblocks/client";
 import { PUBLIC_LIVEBLOCKS_PUBLIC_KEY } from "$env/static/public";
 
 export const client = createClient({
@@ -25,8 +31,22 @@ export type Point =
   | [x: number, y: number, pressure: number]
   | [x: number, y: number];
 
-export type Path = LiveList<Point>;
+export type Path = LiveObject<{
+  color: string;
+  points: LiveList<Point>;
+}>;
 
+// Basically this structure
+// paths: Map<{
+//   "s8sfg8...": {
+//     color: "red",
+//     points: [
+//       [245, 373, 0.5],
+//       [256, 383, 0.5],
+//       ...
+//     ],
+//   }>
+// }
 export type Storage = {
   paths: LiveMap<string, Path>;
 };
