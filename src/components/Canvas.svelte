@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getStroke } from "./perfect-freehand";
   import { getSvgPathFromStroke } from "./utils";
-  import type { TypedRoom, Storage } from "../liveblocks.config";
+  import type { Storage, Point, TypedRoom } from "../liveblocks.config";
   import { LiveList, LiveObject } from "@liveblocks/client";
   import { nanoid } from "nanoid";
 
@@ -10,24 +10,24 @@
     storage,
   }: {
     room: TypedRoom;
-    storage: Storage;
+    storage: LiveObject<Storage>;
   } = $props();
 
   // Get the `paths` LiveMap from Storage
   // https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap
-  let paths = $state(storage.get("paths"));
+  const paths = storage.get("paths");
 
   // Holds SVG paths data to draw the paths
-  let svgPaths = $state([]);
+  let svgPaths: { d: string, fill: string }[] = $state([]);
 
   // Current pathId being drawn
-  let currentId = $state(null);
+  let currentId: string | null = $state(null);
 
   // Delete previous points and start a new path
   function handlePointerDown(e: PointerEvent) {
-    e.target.setPointerCapture(e.pointerId);
+    (e.target as SVGElement).setPointerCapture(e.pointerId);
 
-    const newPoints = new LiveList();
+    const newPoints = new LiveList<Point>();
     newPoints.push([e.pageX, e.pageY, e.pressure]);
 
     const newId = nanoid();
@@ -46,10 +46,10 @@
       return;
     }
 
-    e.target.setPointerCapture(e.pointerId);
+    (e.target as SVGElement).setPointerCapture(e.pointerId);
 
-    const points = paths.get(currentId).get("points");
-    points.push([e.pageX, e.pageY, e.pressure]);
+    const points = paths.get(currentId)?.get("points");
+    points?.push([e.pageX, e.pageY, e.pressure]);
   }
 
   function handlePointerUp() {

@@ -1,10 +1,11 @@
-import { enterRoom } from "../liveblocks.config";
+import type { LiveObject } from "@liveblocks/client";
+import { type Storage, type TypedRoom, enterRoom } from "../liveblocks.config";
 
 // Functions to join/leave a multiplayer room and get real-time Storage
 export class Liveblocks {
-  room = $state();
-  storage = $state();
-  roomId;
+  room: TypedRoom | undefined = $state();
+  storage: LiveObject<Storage> | undefined = $state();
+  roomId: string;
 
   constructor(roomId: string) {
     this.roomId = roomId;
