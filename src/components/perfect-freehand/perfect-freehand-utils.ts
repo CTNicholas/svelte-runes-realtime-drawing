@@ -1,4 +1,4 @@
-import type { Point } from "../liveblocks.config";
+import type { Point } from "../../liveblocks.config";
 
 const average = (a: number, b: number) => (a + b) / 2;
 

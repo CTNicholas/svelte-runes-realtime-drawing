@@ -16,8 +16,7 @@ export const client = createClient({
 // and that will automatically be kept in sync. Accessible through the
 // `user.presence` property. Must be JSON-serializable.
 export type Presence = {
-  // cursor: { x: number, y: number } | null,
-  // ...
+  color: string;
 };
 
 // Optionally, Storage represents the shared document that persists in the
@@ -79,7 +78,9 @@ export type TypedRoom = Room<Presence, Storage, UserMeta, RoomEvent>;
 // Enter room with initial values and correct types
 export function enterRoom(roomId: string) {
   return client.enterRoom<Presence, Storage, UserMeta, RoomEvent>(roomId, {
-    initialPresence: {},
+    initialPresence: {
+      color: "#E54900"
+    },
     initialStorage: {
       // Start the room with an empty LiveMap
       // https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap

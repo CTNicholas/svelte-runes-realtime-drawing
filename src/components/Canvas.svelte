@@ -1,17 +1,20 @@
 <script lang="ts">
-  import { getStroke } from "./perfect-freehand";
-  import { getSvgPathFromStroke } from "./utils";
+  import { getStroke } from "./perfect-freehand/perfect-freehand";
+  import { getSvgPathFromStroke } from "./perfect-freehand/perfect-freehand-utils";
   import type { Storage, Point, TypedRoom } from "../liveblocks.config";
   import { LiveList, LiveObject } from "@liveblocks/client";
   import { nanoid } from "nanoid";
 
-  let {
+  export const {
     room,
     storage,
   }: {
     room: TypedRoom;
     storage: LiveObject<Storage>;
   } = $props();
+
+  // Multiplayer presence, used to store temporary user data e.g. brush colour
+  let presence = room.getPresence();
 
   // Get the `paths` LiveMap from Storage
   // https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap
@@ -30,9 +33,10 @@
     const newPoints = new LiveList<Point>();
     newPoints.push([e.pageX, e.pageY, e.pressure]);
 
+    // Create a path with the current user's brush colour
     const newId = nanoid();
     const newPath = new LiveObject({
-      color: "#E54900",
+      color: presence.color,
       points: newPoints,
     });
 
@@ -86,6 +90,9 @@
 
   // Listen for `paths` changing in Storage, and create updated `svgPaths`
   room.subscribe(paths, renderPaths, { isDeep: true });
+
+  // Listen for presence changes and update
+  room.subscribe("my-presence", (newPresence) => presence = newPresence);
 
   renderPaths();
 </script>

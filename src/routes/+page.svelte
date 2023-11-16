@@ -1,21 +1,20 @@
 <script lang="ts">
   import "../globals.css";
-  import { Liveblocks } from "../components/useLiveblocks.svelte";
   import Canvas from "../components/Canvas.svelte";
   import Logo from "../components/Logo.svelte";
-
-  const lb = new Liveblocks("my-other-svelte-room-again");
-
-  $effect(() => {
-    return lb.enter();
-  });
+  import Toolbar from "../components/Toolbar.svelte";
+  import LiveblocksProvider from "../components/LiveblocksProvider.svelte";
 </script>
 
 <main>
   <Logo />
-  {#if lb.room && lb.storage}
+  <LiveblocksProvider id="my-other-svelte-room-again">
+    <Toolbar />
+  </LiveblocksProvider>
+  <!-- {#if provider.room && provider.storage}
     <Canvas room={lb.room} storage={lb.storage} />
-  {/if}
+    <Toolbar />
+  {/if} -->
 </main>
 
 <style>
