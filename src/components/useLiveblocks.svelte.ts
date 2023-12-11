@@ -20,21 +20,3 @@ export class Liveblocks {
     return leave;
   };
 }
-
-// Was previously written like this and used with `useLiveblocks()` and onMount/onDestroy
-// export function useLiveblocks(roomId: string) {
-//   class Liveblocks {
-//     room = $state();
-//     leave  = $state();
-//     storage = $state();
-//
-//     async enter() {
-//       const info = enterRoom(roomId);
-//       this.room = info.room;
-//       this.leave = info.leave;
-//       this.storage = (await info.room.getStorage()).root);
-//     }
-//   }
-//
-//   return new Liveblocks();
-// }
